@@ -464,8 +464,8 @@ const retrieveData = async (tokenSymbol, exchangeAddress) => {
     const url = `https://raw.githubusercontent.com/Roger-Wu/uniswap-info/data/exchange-events/${exchangeAddress.toLowerCase()}.json`;
     const response = await fetch(url);
     if (response.status === 200) {
-      console.log('Cached events fetched.');
       const cachedEvents = await response.json();
+      console.log(`${cachedEvents.length} cached events fetched.`);
       if (cachedEvents.length > 0) {
         events = cachedEvents;
         fromBlock = events[events.length - 1].blockNumber + 1;
