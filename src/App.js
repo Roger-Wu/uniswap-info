@@ -507,6 +507,7 @@ const retrieveData = async (tokenSymbol, exchangeAddress) => {
   }
 
   console.log(events);
+  console.log(JSON.stringify(events));
 
   let eventListTemp = [];
 
