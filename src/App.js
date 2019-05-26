@@ -245,7 +245,7 @@ const TokenChart = props => {
 
   for (var daysBack = numDaysBackToCalculate; daysBack >= 0; daysBack--) {
     var date = new Date(Date.now() - oneDayOffset * daysBack);
-    
+
     var dateKey = date.getMonth() + "-" + date.getDate() + "-" + date.getFullYear();
 
     // track eth liquidity
@@ -275,7 +275,7 @@ const TokenChart = props => {
     } else {
       volumeData.push(0);
     }
-    
+
     ethLiquidityData.push(currentEthLiquidity.toFixed(4));
 
     tokenLiquidityData.push(currentTokenLiquidity.toFixed(4));
@@ -455,14 +455,14 @@ const retrieveData = async (tokenSymbol, exchangeAddress) => {
   var toBlock = fromBlock + blockPageAmount;
 
   var options = {
-    address: exchangeAddress    
+    address: exchangeAddress
   };
 
   while (true) {
     options["fromBlock"] = fromBlock;
     options["toBlock"] = toBlock;
 
-    console.log("Retrieving data for exchange " + exchangeAddress + " from block " + fromBlock + " to " + toBlock);  
+    console.log("Retrieving data for exchange " + exchangeAddress + " from block " + fromBlock + " to " + toBlock);
 
     loadingUpToBlockNum = toBlock;
 
@@ -476,7 +476,13 @@ const retrieveData = async (tokenSymbol, exchangeAddress) => {
         });
       });
     } catch (error) {
-      console.log(error);
+      console.log('error', error);
+
+      if (error.message.includes('query returned more than')) {
+        blockPageAmount = Math.floor(blockPageAmount / 2);
+        toBlock = fromBlock + blockPageAmount;
+      }
+
       continue;
     };
 
