@@ -458,6 +458,27 @@ const retrieveData = async (tokenSymbol, exchangeAddress) => {
     address: exchangeAddress
   };
 
+  // try fetching cached events
+  try {
+    console.log('Fetching cached events...');
+    const url = `https://raw.githubusercontent.com/Roger-Wu/uniswap-info/data/exchange-events/${exchangeAddress.toLowerCase()}.json`;
+    const response = await fetch(url);
+    if (response.status === 200) {
+      console.log('Cached events fetched.');
+      const cachedEvents = await response.json();
+      if (cachedEvents.length > 0) {
+        events = cachedEvents;
+        fromBlock = events[events.length - 1].blockNumber + 1;
+        toBlock = fromBlock + blockPageAmount;
+      }
+    } else {
+      console.log('No cached events.');
+    }
+  } catch (error) {
+    console.error(error);
+    console.log('Fetching cached events failed.');
+  }
+
   while (true) {
     options["fromBlock"] = fromBlock;
     options["toBlock"] = toBlock;
@@ -476,7 +497,7 @@ const retrieveData = async (tokenSymbol, exchangeAddress) => {
         });
       });
     } catch (error) {
-      console.log('error', error);
+      console.log(error);
 
       if (error.message.includes('query returned more than')) {
         blockPageAmount = Math.floor(blockPageAmount / 2);
