@@ -236,7 +236,7 @@ const TokenChart = props => {
 
   // calculate dataset
   var numDaysBackToCalculate = 720;
-  var numDaysToShowOnChart = 60;
+  var numDaysToShowOnChart = 90;
 
   var oneDayOffset = 24 * 60 * 60 * 1000; // in milliseconds
 
